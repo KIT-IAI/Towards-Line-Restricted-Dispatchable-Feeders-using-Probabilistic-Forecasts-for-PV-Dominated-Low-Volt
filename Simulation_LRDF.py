@@ -1,29 +1,24 @@
-#week 1
-#Overall computation from 18-03-2013 12:00 - 25-03-2013 23:00
-start_compute = pd.to_datetime('2013-03-18 12:00')
-end_compute = pd.to_datetime('2013-03-25 23:00')
-quantile_files = 
-true_power_files =
-#week 2
-#Overall computation from 16-03-2013 12:00 - 23-04-2013 23:00
-start_compute = pd.to_datetime('2013-04-16 12:00')
-end_compute = pd.to_datetime('2013-04-23 23:00')
-quantile_files = 
-true_power_files =
-#week 3
-#Overall computation from 21-05-2013 12:00 - 28-05-2013 23:00
-start_compute = pd.to_datetime('2013-05-21 12:00')
-end_compute = pd.to_datetime('2013-05-28 23:00')
-quantile_files = 
-true_power_files = 
+import utils
+import utils_LRDF
+
+#week 1: 18-03-2013 12:00 - 25-03-2013 23:00
+#week 2: 16-03-2013 12:00 - 23-04-2013 23:00
+#week 3: 21-05-2013 12:00 - 28-05-2013 23:00
+#TODO: Replace 
+#'START_DATE'
+#'END_DATE'
+#'PATH_TO_FIRST_HOUSE_FORECAST_DATA'
+#'PATH_TO_FIRST_HOUSE_FACTUAL_DATA'
+start_compute = pd.to_datetime('START_DATE')
+end_compute = pd.to_datetime('END_DATE')
+quantile_files = ['PATH_TO_FIRST_HOUSE_FORECAST_DATA']
+true_power_files = ['PATH_TO_FIRST_HOUSE_ACTUAL_DATA']
 
 
-#Initialize Houses
+#Initialize House
 houses = []
 for _ in range(parameter['number_houses']):
     houses.append(ProbabilisticHouse(parameter, start_compute, end_compute))
-quantile_files = ['Quantiles_modified_3G_both.pkl']
-true_power_files = ['TruePower_modified_3G.pkl']
 quantiles = dict.fromkeys(['house' + str(i) for i in range(len(houses))], None)
 true_power = dict.fromkeys(['house' + str(i) for i in range(len(houses))], None)
 for i, house in enumerate(houses):
@@ -47,6 +42,7 @@ for i, house in enumerate(houses):
 #Perform Simulation
 houses_unrestricted = copy.deepcopy(houses)
 houses_restricted_error = copy.deepcopy(houses)
+#Set parameter['g_max'] to high value for unrestricted case
 parameter['g_max'] = 200000
 costs1_unrestricted, costs2_unrestricted, costs3_unrestricted = \
 run_all_probabilistic_variablehouses_function(parameter, houses_unrestricted, quantiles, true_power)
@@ -54,6 +50,7 @@ houses_restricted = copy.deepcopy(houses_unrestricted)
 g_max_unrestricted = max(abs(sum(house.actual_g['value'] for house in houses_unrestricted)))
 parameter['g_max'] = g_max_unrestricted
 print(parameter['g_max'])
+#Reduce parameter['g_max'] until optimization problem does not converge
 while True:
     try:
         houses_restricted_temp = copy.deepcopy(houses) 

@@ -260,7 +260,7 @@ def compute_DS(parameter, houses, forecast_median_extract, forecast_probabilisti
                                      forecast_probabilistic['house' + str(i)]['CDF'][k+1](house.e[k+1] - \
                                                                                                   house.e_max) + \
                                      house.epsilon[k] + house.rho[k]
-            lb_chance_constraint_SOE = 1 - parameter['epsilon'] 
+            lb_chance_constraint_SOE = 1 - parameter['epsilon_CDF'] 
             ub_chance_constraint_SOE = inf
             constraints_list.append(chance_constraint_SOE)
             lb_list.append(lb_chance_constraint_SOE)
