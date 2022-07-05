@@ -13,6 +13,9 @@ start_compute = pd.to_datetime('START_DATE')
 end_compute = pd.to_datetime('END_DATE')
 quantile_files = ['PATH_TO_FIRST_HOUSE_FORECAST_DATA']
 true_power_files = ['PATH_TO_FIRST_HOUSE_ACTUAL_DATA']
+#TODO: Set security levels
+parameter['epsilon_CDF'] = 0.2
+parameter['epsilon_quantiles'] = 0.4
 
 
 #Initialize House
