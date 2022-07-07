@@ -1,4 +1,4 @@
-from casdi import *
+from casadi import *
 import copy
 
 ####################################2. Stage: MPC####################################
