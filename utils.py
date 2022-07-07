@@ -1,3 +1,6 @@
+from casdi import *
+import copy
+
 ####################################2. Stage: MPC####################################
 def mpc(parameter, houses, forecast_median, actual_e, index_time):
     

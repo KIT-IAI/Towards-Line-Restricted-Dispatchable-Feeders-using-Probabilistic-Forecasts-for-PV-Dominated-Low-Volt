@@ -42,8 +42,7 @@ houses_unrestricted = copy.deepcopy(houses)
 houses_restricted_error = copy.deepcopy(houses)
 #Set parameter['g_max'] to high value for unrestricted case
 parameter['g_max'] = 200000
-costs1_unrestricted, costs2_unrestricted, costs3_unrestricted = \
-run_all_perfect_variablehouses_function(parameter, houses_unrestricted, true_power)
+costs1_unrestricted= run_all_perfect_variablehouses_function(parameter, houses_unrestricted, true_power)
 houses_restricted = copy.deepcopy(houses_unrestricted)
 g_max_unrestricted = max(abs(sum(house.actual_g['value'] for house in houses_unrestricted)))
 parameter['g_max'] = g_max_unrestricted
@@ -53,8 +52,7 @@ while True:
     try:
         houses_restricted_temp = copy.deepcopy(houses) 
         parameter['g_max'] = round(parameter['g_max'], 1) - 0.2
-        costs1_restricted, costs2_restricted, costs3_restricted = \
-        run_all_perfect_variablehouses_function(parameter, houses_restricted_temp, true_power)
+        costs1_restricted = run_all_perfect_variablehouses_function(parameter, houses_restricted_temp, true_power)
         houses_restricted = copy.deepcopy(houses_restricted_temp)
         print(parameter['g_max'])
     except AssertionError as error:
@@ -63,8 +61,7 @@ while True:
         houses_restricted_error = copy.deepcopy(houses_restricted_temp)
         try:
             houses_restricted_temp = copy.deepcopy(houses)
-            costs1_restricted, costs2_restricted, costs3_restricted = \
-            run_all_perfect_variablehouses_function(parameter, houses_restricted_temp, true_power)
+            costs1_restricted = run_all_perfect_variablehouses_function(parameter, houses_restricted_temp, true_power)
             houses_restricted = copy.deepcopy(houses_restricted_temp)
             print(parameter['g_max'])
         except AssertionError as error:

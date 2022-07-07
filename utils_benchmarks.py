@@ -1,3 +1,5 @@
+from utils import *
+
 ####################################Run All Deterministic####################################
 def run_all_deterministic_variablehouses_function(parameter, houses, quantiles, true_power):
     
@@ -179,7 +181,7 @@ def run_all_perfect_variablehouses_function(parameter, houses, true_power):
         for i, house in enumerate(houses):
             house.actual_power['value'][index_time] = true_power['house' + str(i)][index_forecast]
 
-    return(stage1_costs, stage2_costs, stage3_costs)
+    return(stage1_costs)
 
 
 ####################################Compute Dispatch Schedule####################################
