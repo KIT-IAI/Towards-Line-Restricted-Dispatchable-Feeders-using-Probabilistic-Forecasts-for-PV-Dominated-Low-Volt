@@ -2,6 +2,10 @@
 
 This repository contains code for the evaluation of the line-restricted dispatchable feeder (LRDF) and the considered benchmarks.
 
+To start the simulation for the LRDF, run 'Simulation_LRDF.py' (please consider TODO).
+
+To start the simulation for the benchmarks, run 'Simulation_benchmarks.py' (please consider TODO).
+
 Please note the following:
 - The used data is of the form:
   - quantiles: dict with keys 'power' and 'energy' 
