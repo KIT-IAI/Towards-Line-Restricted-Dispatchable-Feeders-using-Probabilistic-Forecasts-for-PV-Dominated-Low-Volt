@@ -1,5 +1,5 @@
-import utils
-import utils_LRDF
+from utils import *
+from utils_LRDF import *
 
 #week 1: 18-03-2013 12:00 - 25-03-2013 23:00
 #week 2: 16-03-2013 12:00 - 23-04-2013 23:00

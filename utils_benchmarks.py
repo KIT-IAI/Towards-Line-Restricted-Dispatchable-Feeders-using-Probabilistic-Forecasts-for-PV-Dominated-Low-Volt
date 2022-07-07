@@ -1,3 +1,5 @@
+from utils import house
+
 ####################################Subclass Perfect House####################################
 class PerfectHouse(House):
     def __init__(self, parameter, start_compute, end_compute):
@@ -178,6 +180,70 @@ def run_all_deterministic_variablehouses_function(parameter, houses, quantiles, 
             house.actual_power['value'][index_time] = true_power['house' + str(i)][index_forecast]
             actual_e['house' + str(i)] = house.actual_e['value'][index_time+1]
         
+    return(stage1_costs, stage2_costs, stage3_costs)
+
+
+####################################Run All Perfect####################################
+def run_all_perfect_variablehouses_function(parameter, houses, true_power):
+    
+    ##Initialization
+    actual_e = dict.fromkeys(['house' + str(i) for i in range(len(houses))], None)
+    stage1_costs = []
+    
+    ##########################Scheduling##########################
+
+    ####Day 0
+    ###hour = 12:00
+
+    ##Estimate SoC in 00:00 -> not needed in Day 0
+    #Save results
+    for i, house in enumerate(houses):
+        actual_e['house' + str(i)] = house.e_start
+
+    ##1. Stage: Compute DS; DS from 00:00 - 23:00 + extension 
+    true_power_extract = {keys: values[parameter['len_compute']:] for keys, values in true_power.items()}
+    stage1_costs.append(compute_DS(parameter, houses, true_power_extract, actual_e))
+    #Save results
+    for i, house in enumerate(houses):
+        house.dec_var_to_results('actual', 0, parameter['len_DS_extended'])
+
+
+    ####Day = 1,... 
+    ###hour = 00:00,... 
+    #index_time: index of actual time
+    #time: actual time
+    for index_time, time in enumerate(houses[0].hours[int(np.where(houses[0].hours == houses[0].start_schedule)[0]):], start=0):
+
+        #index_forecast: index of actual time in forecast data
+        index_forecast = index_time + parameter['len_compute']
+
+        ##########################Offline##########################
+
+        ##If 12:00: Estimate SoC and Compute DS
+        if time.hour == 12 and time.day != houses[0].end_compute.day:
+
+            #index_schedule: Start of schedule
+            index_schedule = int(np.where((houses[0].index_DS.hour == 0) & \
+                                          (houses[0].index_DS.day == time.day + 1))[0])
+
+            ##SoC in 00:00
+            for i, house in enumerate(houses):
+                actual_e['house' + str(i)] = house.actual_e['value'][index_schedule]
+    
+            
+            ##1. Stage: Compute DS from 00:00 - 23:00
+            #We need forecasts from 00:00 upwards 
+            #e0 is SoC in 00:00
+            true_power_extract = {keys: values[index_forecast+parameter['len_compute']:] for keys, values in true_power.items()}
+            stage1_costs.append(compute_DS(parameter, houses, true_power_extract, actual_e))
+            #Save results
+            for i, house in enumerate(houses):
+                house.dec_var_to_results('actual', index_schedule, parameter['len_DS_extended'])
+        
+        ##Get actual load power
+        for i, house in enumerate(houses):
+            house.actual_power['value'][index_time] = true_power['house' + str(i)][index_forecast]
+
     return(stage1_costs, stage2_costs, stage3_costs)
 
 

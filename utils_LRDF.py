@@ -1,3 +1,5 @@
+from utils import house
+
 ####################################Subclass Probabilistic House####################################    
 class ProbabilisticHouse(House):
     def __init__(self, parameter, start_compute, end_compute):
